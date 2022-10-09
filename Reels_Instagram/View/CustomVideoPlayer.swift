@@ -1,6 +1,6 @@
 //
 //  CustomVideoPlayer.swift
-//  Tiktok_clone
+//  Reels_Instagram
 //
 //  Created by Camilo Ibarra yepes on 9/10/22.
 //

@@ -1,14 +1,14 @@
 //
-//  Tiktok_cloneTests.swift
-//  Tiktok_cloneTests
+//  Reels_InstagramTests.swift
+//  Reels_InstagramTests
 //
-//  Created by Camilo Ibarra yepes on 9/10/22.
+//  Created by Camilo Ibarra yepes on 10/10/22.
 //
 
 import XCTest
-@testable import Tiktok_clone
+@testable import Reels_Instagram
 
-final class Tiktok_cloneTests: XCTestCase {
+final class Reels_InstagramTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

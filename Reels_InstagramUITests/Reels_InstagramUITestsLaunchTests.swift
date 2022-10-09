@@ -1,13 +1,13 @@
 //
-//  Tiktok_cloneUITestsLaunchTests.swift
-//  Tiktok_cloneUITests
+//  Reels_InstagramUITestsLaunchTests.swift
+//  Reels_InstagramUITests
 //
-//  Created by Camilo Ibarra yepes on 9/10/22.
+//  Created by Camilo Ibarra yepes on 10/10/22.
 //
 
 import XCTest
 
-final class Tiktok_cloneUITestsLaunchTests: XCTestCase {
+final class Reels_InstagramUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
