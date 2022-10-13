@@ -38,6 +38,9 @@ struct Home: View {
             }
             .padding(.horizontal)
             .padding(.vertical, 10)
+            .overlay(Divider(), alignment: .top)
+            // if reels changing color to black ...
+            .background(currentTab == "Reels" ? .black : .clear)
         }
     }
 }
@@ -69,7 +72,7 @@ struct TabBarButton: View {
                         .frame(width: 25, height: 25)
                 }
             }
-            .foregroundColor(currentTab == image ? .primary : .gray)
+            .foregroundColor(currentTab == image ? currentTab == "Reels" ? .white : .primary : .gray)
             .frame(maxWidth: .infinity)
         }
     }
