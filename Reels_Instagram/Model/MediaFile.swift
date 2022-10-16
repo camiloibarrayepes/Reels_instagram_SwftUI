@@ -15,8 +15,8 @@ struct MediaFile: Identifiable {
 }
 
 var MediaFileJSON = [
-    MediaFile(url: "Reel1", title: "Reel 1 description"),
-    MediaFile(url: "Reel2", title: "Reel 2 description"),
+    MediaFile(url: "Reel2", title: "Reel 1 description"),
+    MediaFile(url: "Reel1", title: "Reel 2 description"),
     MediaFile(url: "Reel3", title: "Reel 3 description"),
     MediaFile(url: "Reel4", title: "Reel 4 description")
 ]

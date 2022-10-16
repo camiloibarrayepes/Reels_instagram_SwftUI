@@ -22,11 +22,12 @@ struct ReelsView: View {
             
             TabView(selection: $currentReel) {
                 ForEach($reels){ $reel in
-                    ReelsPlayer(reel: $reel)
+                    ReelsPlayer(reel: $reel, currentReel: $currentReel)
                     // setting width
                     .frame(width: size.width)
                     .rotationEffect(.init(degrees: -90))
                     .ignoresSafeArea(.all, edges: .top)
+                    .tag(reel.id)
                 }
             }
             .rotationEffect(.init(degrees: 90))
@@ -36,6 +37,10 @@ struct ReelsView: View {
         }
         .ignoresSafeArea(.all, edges: .top)
         .background(Color.black.ignoresSafeArea())
+        // Setting initial reel...
+        .onAppear {
+            currentReel = reels.first?.id ?? ""
+        }
     }
 }
 
@@ -47,14 +52,59 @@ struct ReelsView_Previews: PreviewProvider {
 
 struct ReelsPlayer: View {
     @Binding var reel: Reel
+    @Binding var currentReel: String
     
     // Expanding title if its clicked...
     @State var showMore = false
+    
+    @State var isMuted = false
+    @State var volumeAnimation = false
     
     var body: some View {
         ZStack {
             if let player = reel.player {
                 CustomVideoPlayer(player: player)
+                
+                // Playing video based on offset
+                GeometryReader { proxy -> Color in
+                    let minY = proxy.frame(in: .global).minY
+                    let size = proxy.size
+                    DispatchQueue.main.async {
+                        if -minY < (size.height / 2) && minY < (size.height / 2) && currentReel == reel.id {
+                            player.play()
+                        } else {
+                            player.pause()
+                        }
+                    }
+                    return Color.clear
+                }
+                
+                // Volume control
+                Color.black
+                    .opacity(0.01)
+                    .frame(width: 150, height: 150)
+                    .onTapGesture {
+                        if volumeAnimation {
+                            return
+                        }
+                        isMuted.toggle()
+                        // Muting player...
+                        player.isMuted = isMuted
+                        withAnimation{volumeAnimation.toggle()}
+                        
+                        // closing animation after 0.8 sec..
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            withAnimation{volumeAnimation.toggle()}
+                        }
+                    }
+                
+                // Dimming bg when showing more content...
+                Color.black.opacity(showMore ? 0.35 : 0)
+                    .onTapGesture {
+                        // Closing it
+                        withAnimation{showMore.toggle()}
+                    }
+                
                 VStack {
                     HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 10) {
@@ -81,7 +131,11 @@ struct ReelsPlayer: View {
                                         Text(reel.mediaFile.title + sampleText)
                                             .font(.callout)
                                             .fontWeight(.semibold)
-                                    }.frame(height: 120)
+                                    }
+                                    .frame(height: 120)
+                                    .onTapGesture {
+                                        withAnimation{showMore.toggle()}
+                                    }
                                 } else {
                                     Button {
                                         withAnimation{showMore.toggle()}
@@ -106,11 +160,38 @@ struct ReelsPlayer: View {
                         //List of buttons
                         ActionsButtons(reel: reel)
                     }
+                    // Music View...
+                    HStack {
+                        Text("A Sky full of Starts")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                        Spacer(minLength: 20)
+                        Image("album")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 30, height: 30)
+                            .cornerRadius(6)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.white, lineWidth: 3)
+                            )
+                            .offset(x: -5)
+                    }
+                    .padding(.top, 10)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
                 .foregroundColor(.white)
                 .frame(maxHeight: .infinity, alignment: .bottom)
+                
+                Image(systemName: isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(.secondary)
+                    .clipShape(Circle())
+                    .foregroundStyle(.black)
+                    .opacity(volumeAnimation ? 1 : 0)
             }
         }
     }
